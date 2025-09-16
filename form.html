@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Checkout Form</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f9f9f9; margin:0; padding:20px; }
+    .checkout-container { max-width:1000px; margin:auto; display:flex; gap:20px; }
+    .checkout-form { flex:2; background:#fff; padding:22px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+    .order-summary { flex:1; background:#fff; padding:18px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+    label { display:block; font-weight:600; margin-top:12px; }
+    input[type="text"], input[type="number"], textarea, select { width:100%; padding:10px; border-radius:8px; border:1px solid #ddd; margin-top:6px; }
+    .btn { margin-top:14px; padding:12px 16px; background:#2f9d58; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:700; }
+    ul { list-style:none; padding:0; margin:8px 0; }
+    li { padding:8px 0; border-bottom:1px dashed #eee; }
+    .total { font-weight:800; margin-top:12px; font-size:16px; }
+  </style>
+</head>
+<body>
+
+  <h1 style="text-align:center">Checkout</h1>
+  <div class="checkout-container">
+    <form class="checkout-form" action="proses_signup.php" method="POST" id="checkoutForm">
+      <label for="nama">Full name</label>
+      <input type="text" id="nama" name="nama" required>
+
+      <label for="alamat">Address</label>
+      <input type="text" id="alamat" name="alamat" required>
+
+      <label for="nomor">WhatsApp number</label>
+      <input type="number" id="nomor" name="nomor" required>
+
+      <label for="delivery">Delivery method</label>
+      <select id="delivery" name="delivery">
+        <option value="Delivery">Delivery</option>
+        <option value="Pick up">Pick up</option>
+      </select>
+
+      <label for="notes">Notes</label>
+      <textarea id="notes" name="notes" rows="3" placeholder="e.g. leave at the door..."></textarea>
+
+      <input type="hidden" name="cart_data" id="cart_data">
+      <input type="hidden" name="cart_total" id="cart_total">
+
+      <button type="submit" class="btn">Place Order</button>
+    </form>
+
+    <aside class="order-summary">
+      <h3>Your Order</h3>
+      <div id="orderContainer">
+        <p class="empty">Loading your cart…</p>
+      </div>
+      <p class="total">Total: Rp<span id="orderTotal">0</span></p>
+    </aside>
+  </div>
+
+<script>
+  const CART_KEY = 'milkCart';
+  const orderContainer = document.getElementById('orderContainer');
+  const orderTotalEl = document.getElementById('orderTotal');
+  const cartDataInput = document.getElementById('cart_data');
+  const cartTotalInput = document.getElementById('cart_total');
+
+  function formatRp(num){ return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const saved = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+    if (!saved.length) {
+      orderContainer.innerHTML = '<p class="empty">Your cart is empty. Please add products first.</p>';
+      orderTotalEl.textContent = '0';
+      cartDataInput.value = '[]';
+      cartTotalInput.value = 0;
+      return;
+    }
+
+    orderContainer.innerHTML = '<ul id="orderList"></ul>';
+    const orderListEl = document.getElementById('orderList');
+    let total = 0;
+    saved.forEach(item => {
+      const li = document.createElement('li');
+      li.innerHTML = `<strong>${item.product}</strong> — ${item.qty} × Rp${formatRp(item.price)} = Rp${formatRp(item.price * item.qty)}`;
+      orderListEl.appendChild(li);
+      total += item.price * item.qty;
+    });
+
+    orderTotalEl.textContent = formatRp(total);
+    cartDataInput.value = JSON.stringify(saved);
+    cartTotalInput.value = total;
+  });
+
+</script>
+</body>
+</html>

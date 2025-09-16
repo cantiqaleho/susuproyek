@@ -1,115 +1,205 @@
+<!-- save as products.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Milk Shop - Products</title>
   <style>
-    #products {
-  max-width: 1000px;
-  margin: 40px auto;
-  padding: 20px;
-  text-align: center;
-}
+    body { font-family: Arial, sans-serif; margin:0; padding:20px; background:#f5f5f5; }
+    .container { max-width:1100px; margin:auto; display:flex; gap:20px; }
+    .product-grid { flex:2; display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
+    .product-card { background:white; padding:16px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.08); text-align:center; }
+    .product-card img { width:100%; height:160px; object-fit:cover; border-radius:8px; margin-bottom:10px; }
+    .product-card h3 { margin:6px 0; }
+    .product-card p { margin:6px 0; color:#666; }
+    .product-card input[type="number"] { width:64px; padding:6px; border-radius:6px; border:1px solid #ccc; }
+    .product-card button { margin-top:8px; padding:8px 12px; border:none; background:#2f9d58; color:white; border-radius:8px; cursor:pointer; font-weight:bold; }
+    .product-card button:hover { background:#248142; }
 
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); 
-  gap: 25px;
-}
+    .cart-sidebar { position:fixed; top:0; right:-380px; width:360px; height:100%; background:#fff; box-shadow:-3px 0 20px rgba(0,0,0,0.15); transition:right .28s ease; padding:20px; overflow:auto; z-index:50; }
+    .cart-sidebar.open { right:0; }
+    .cart-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+    .cart-item { display:flex; justify-content:space-between; align-items:center; gap:8px; padding:8px 0; border-bottom:1px dashed #eee; }
+    .qty-controls button { padding:6px 8px; border:none; background:#ddd; border-radius:6px; cursor:pointer; }
+    .cart-footer { margin-top:16px; }
+    .put-order { background:#2f9d58; color:#fff; border:none; padding:10px 14px; border-radius:8px; cursor:pointer; font-weight:bold; width:100%; }
+    .close-btn { background:#ef5350; color:#fff; border:none; padding:6px 8px; border-radius:6px; cursor:pointer; }
 
-.product-card {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  transition: transform 0.2s;
-}
-
-.product-card:hover {
-  transform: translateY(-5px);
-}
-
-.product-card img {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 10px;
-}
-
-.product-card h3 {
-  margin: 10px 0 5px;
-}
-
-.product-card .price {
-  font-weight: bold;
-  color: #4CAF50;
-}
-
-.product-card button {
-  margin-top: 10px;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 6px;
-  background: #4CAF50;
-  color: white;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.product-card button:hover {
-  background: #45a049;
-}
+    .empty { color:#888; text-align:center; padding:14px 0; }
   </style>
 </head>
 <body>
-  <section id="products">
-  <h2>Our Products</h2>
-  <div class="product-grid">
 
-    <div class="product-card">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpxqaN3AQ0zgFnpwvQajKgQ7dR3U5xDHbi5A&s" alt="Citrus Zest">
-      <h3>Citrus Zest</h3>
-      <p>250 ml</p>
-      <p class="price">Rp10.000</p>
-      <button>Add to Cart</button>
-    </div>
+  <h1 style="text-align:center">Our Flavors</h1>
+  <div class="container">
+    <div class="product-grid">
+      <div class="product-card" data-id="citrus" data-name="Citrus Zest" data-price="10000">
+        <img src="images/citrus.jpg" alt="Citrus Zest (placeholder)">
+        <h3>Citrus Zest</h3>
+        <p>250 ml — Rp10.000</p>
+        <div>
+          <input type="number" id="qty-citrus" value="1" min="1">
+        </div>
+        <button onclick="addToCartFromCard('citrus')">Add to Cart</button>
+      </div>
 
-    <!-- Product 2 -->
-    <div class="product-card">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpxqaN3AQ0zgFnpwvQajKgQ7dR3U5xDHbi5A&s" alt="Grapevine Jelly">
-      <h3>Grapevine Jelly</h3>
-      <p>250 ml</p>
-      <p class="price">Rp10.000</p>
-      <button>Add to Cart</button>
-    </div>
+      <div class="product-card" data-id="grape" data-name="Grapevine Jelly" data-price="10000">
+        <img src="images/grape.jpg" alt="Grapevine Jelly (placeholder)">
+        <h3>Grapevine Jelly</h3>
+        <p>250 ml — Rp10.000</p>
+        <div>
+          <input type="number" id="qty-grape" value="1" min="1">
+        </div>
+        <button onclick="addToCartFromCard('grape')">Add to Cart</button>
+      </div>
 
-    <div class="product-card">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpxqaN3AQ0zgFnpwvQajKgQ7dR3U5xDHbi5A&s" alt="Pink Velvet">
-      <h3>Pink Velvet</h3>
-      <p>250 ml</p>
-      <p class="price">Rp10.000</p>
-      <button>Add to Cart</button>
-    </div>
+      <div class="product-card" data-id="pink" data-name="Pink Velvet" data-price="10000">
+        <img src="images/pink.jpg" alt="Pink Velvet (placeholder)">
+        <h3>Pink Velvet</h3>
+        <p>250 ml — Rp10.000</p>
+        <div>
+          <input type="number" id="qty-pink" value="1" min="1">
+        </div>
+        <button onclick="addToCartFromCard('pink')">Add to Cart</button>
+      </div>
 
-    <div class="product-card">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpxqaN3AQ0zgFnpwvQajKgQ7dR3U5xDHbi5A&s" alt="Cocoa Dream">
-      <h3>Cocoa Dream</h3>
-      <p>250 ml</p>
-      <p class="price">Rp10.000</p>
-      <button>Add to Cart</button>
-    </div>
+      <div class="product-card" data-id="cocoa" data-name="Cocoa Dream" data-price="10000">
+        <img src="images/cocoa.jpg" alt="Cocoa Dream (placeholder)">
+        <h3>Cocoa Dream</h3>
+        <p>250 ml — Rp10.000</p>
+        <div>
+          <input type="number" id="qty-cocoa" value="1" min="1">
+        </div>
+        <button onclick="addToCartFromCard('cocoa')">Add to Cart</button>
+      </div>
 
-    <div class="product-card">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpxqaN3AQ0zgFnpwvQajKgQ7dR3U5xDHbi5A&s" alt="Mango Tango">
+      <div class="product-card" data-id="mango" data-name="Mango Tango" data-price="10000">
+        <img src="images/mango.jpg" alt="Mango Tango (placeholder)">
       <h3>Mango Tango</h3>
       <p>250 ml</p>
       <p class="price">Rp10.000</p>
-      <button>Add to Cart</button>
+        <div>
+          <input type="number" id="qty-mango" value="1" min="1">
+        </div>
+        <button onclick="addToCartFromCard('mango')">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="cartSidebar" class="cart-sidebar" aria-hidden="true">
+    <div class="cart-header">
+      <h2>Your Cart</h2>
+      <div>
+        <button class="close-btn" onclick="closeCart()">Close</button>
+      </div>
     </div>
 
+    <div id="cartItemsContainer">
+      <div class="empty" id="cartEmptyMsg">Your cart is empty</div>
+      <div id="cartItems"></div>
+    </div>
+
+    <div class="cart-footer">
+      <p style="margin-top:12px">Total: <strong>Rp<span id="cartTotal">0</span></strong></p>
+      <button class="put-order" onclick="putOrder()">Put Order →</button>
+    </div>
   </div>
-</section>
+
+<script>
+  const CART_KEY = 'milkCart';
+
+  let cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+
+  function formatRp(num) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
+  function addToCartFromCard(id) {
+    const card = document.querySelector(`[data-id="${id}"]`);
+    const name = card.getAttribute('data-name');
+    const price = parseInt(card.getAttribute('data-price'), 10);
+    const qtyInput = document.getElementById('qty-' + id);
+    let qty = parseInt(qtyInput.value, 10) || 1;
+    if (qty < 1) qty = 1;
+
+    const existing = cart.find(i => i.id === id);
+    if (existing) {
+      existing.qty += qty;
+    } else {
+      cart.push({ id, product: name, price, qty });
+    }
+
+    saveCart();
+    updateCartUI();
+    openCart();
+  }
+
+  function saveCart() {
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  }
+
+  function updateCartUI() {
+    const itemsDiv = document.getElementById('cartItems');
+    const emptyMsg = document.getElementById('cartEmptyMsg');
+    itemsDiv.innerHTML = '';
+    if (!cart.length) {
+      emptyMsg.style.display = 'block';
+    } else {
+      emptyMsg.style.display = 'none';
+    }
+
+    let total = 0;
+    cart.forEach(item => {
+      total += item.price * item.qty;
+      const node = document.createElement('div');
+      node.className = 'cart-item';
+      node.innerHTML = `
+        <div style="flex:1;">
+          <div style="font-weight:600">${item.product}</div>
+          <div style="font-size:13px; color:#666">Rp${formatRp(item.price)} × ${item.qty}</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <div class="qty-controls">
+            <button onclick="changeQtyById('${item.id}', -1)">-</button>
+            <span style="display:inline-block; width:26px; text-align:center;">${item.qty}</span>
+            <button onclick="changeQtyById('${item.id}', 1)">+</button>
+          </div>
+        </div>
+      `;
+      itemsDiv.appendChild(node);
+    });
+    document.getElementById('cartTotal').textContent = formatRp(total);
+  }
+
+  function changeQtyById(id, delta) {
+    const idx = cart.findIndex(i => i.id === id);
+    if (idx === -1) return;
+    cart[idx].qty += delta;
+    if (cart[idx].qty <= 0) cart.splice(idx, 1);
+    saveCart();
+    updateCartUI();
+  }
+
+  function openCart() {
+    document.getElementById('cartSidebar').classList.add('open');
+    document.getElementById('cartSidebar').setAttribute('aria-hidden', 'false');
+  }
+  function closeCart() {
+    document.getElementById('cartSidebar').classList.remove('open');
+    document.getElementById('cartSidebar').setAttribute('aria-hidden', 'true');
+  }
+
+  function putOrder() {
+    if (!cart.length) {
+      alert('Your cart is empty. Add some products first.');
+      return;
+    }
+    saveCart(); 
+    window.location.href = 'form.html';
+  }
+
+  updateCartUI();
+</script>
 </body>
 </html>
