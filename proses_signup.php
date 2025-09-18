@@ -76,7 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
           <p class="total">Total: Rp<?= formatRp($cart_total) ?></p>
         <?php endif; ?>
 
-        <a href="products.html" class="btn-back">← Back to shop</a>
+        <a href="index.html" class="btn-back">← Back to shop</a>
       </div>
     </body>
     </html>
